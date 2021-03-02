@@ -33,7 +33,7 @@ namespace k173669_Q1
             {
                 string responseBody = await client.GetStringAsync(uriResult);
 
-                string fileName = "Summary " +  DateTime.Now.ToLongDateString();
+                string fileName = "Summary" +  DateTime.Now.ToString("ddMMMyy") + ".html";
 
                 using (StreamWriter outputFile = new StreamWriter(
                     Path.Combine(directoryPath, fileName)
