@@ -1,6 +1,8 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 
 namespace k173669_Q2
@@ -9,15 +11,34 @@ namespace k173669_Q2
     {
         static void Main(string[] args)
         {
-            string path = @"C:\Users\bilal\Downloads\Summary04Mar21.html";
+            // Read appSettings from config file
+            var appSettings = ConfigurationManager.AppSettings;
 
-            Dictionary<string, List<Scrips>> stocks = ReadScripsFromHtml(filename:path);
+            // Check whether both keys are present and contain valid paths
+            if(appSettings.AllKeys.Contains("InputFilePath") == false ||
+                appSettings.AllKeys.Contains("OutputFolderPath") == false
+                )
+            {
+                throw new ApplicationException(
+                    "AppSettings do not contain InputFilePath and/or OutputFolderPath"
+                    );
+            }
 
-            Console.WriteLine(stocks.Count);
+            string inputFilePath = appSettings["InputFilePath"];
+            string outputFolderPath = appSettings["OutputFolderPath"];
 
-            // TODO: Create a single timestamped folder. Create a sub-folder against
-            // each category. Create an XML file for each scrip in created sub-folders.
-            StoreScripsToXml(stocks, @"C:\Users\bilal\Downloads\IPT_Assignment_Q2");
+            if (File.Exists(inputFilePath) == false ||
+                Uri.TryCreate(outputFolderPath, uriKind: UriKind.RelativeOrAbsolute, out Uri _) == false
+                )
+            {
+                throw new ApplicationException(
+                    "Could not parse InputFilePath and/or OutputFolderPath as valid paths."
+                    );
+            }
+
+            Dictionary<string, List<Scrips>> stocks = ReadScripsFromHtml(filename: inputFilePath);
+
+            StoreScripsToXml(stocks:stocks, path:outputFolderPath);
         }
 
         /// <summary>
@@ -77,6 +98,12 @@ namespace k173669_Q2
             return stocks;
         }
 
+        /// <summary>
+        /// Creates a timestamped folder under the given path. Also creates subfolders for each
+        /// category, and places one XML per scrip in the relevant category subfolder.
+        /// </summary>
+        /// <param name="stocks"></param>
+        /// <param name="path"></param>
         static void StoreScripsToXml(Dictionary<string,List<Scrips>> stocks, string path)
         {
             string newFolder = System.IO.Path.Combine(path, DateTime.Now.ToString("ddMMMyy hh.mm tt"));
