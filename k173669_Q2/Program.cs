@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace k173669_Q2
 {
@@ -106,29 +107,28 @@ namespace k173669_Q2
         /// <param name="path"></param>
         static void StoreScripsToXml(Dictionary<string,List<Scrips>> stocks, string path)
         {
-            string newFolder = System.IO.Path.Combine(path, DateTime.Now.ToString("ddMMMyy hh.mm tt"));
+            string newFolder = Path.Combine(path, DateTime.Now.ToString("ddMMMyy hh.mm tt"));
 
-            System.IO.Directory.CreateDirectory(newFolder);
+            Directory.CreateDirectory(newFolder);
 
             foreach(var item in stocks)
             {
-                // TODO: create a folder against each category
-                string subFolder = System.IO.Path.Combine(newFolder, item.Key);
-                System.IO.Directory.CreateDirectory(subFolder);
+                // Remove / to prevent nested folders
+                string categoryName = item.Key.Replace("/", " ");
+
+                // Create a folder against each category
+                string subFolder = Path.Combine(newFolder, categoryName);
+                Directory.CreateDirectory(subFolder);
 
                 // Create one XML inside each folder
+                string fileName = Path.Combine(subFolder, $"{categoryName}.xml");
+
+                using FileStream fileStream = new FileStream(fileName, FileMode.Create);
+                XmlSerializer serializer = new XmlSerializer(typeof(List<Scrips>));
 
                 var scrips = item.Value;
-
-                foreach (var scrip in scrips)
-                {
-                    string filename = System.IO.Path.Combine(subFolder, scrip.Scrip + ".xml");
-                    scrip.Serialize(filename:filename);
-                }
+                serializer.Serialize(fileStream, scrips);
             }
-
         }
-
-
     }
 }
