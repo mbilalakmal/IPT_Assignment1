@@ -30,6 +30,8 @@ namespace k173669_Q3
         private void InitializeComponent()
         {
             this.scripsDataGridView = new System.Windows.Forms.DataGridView();
+            this.categoryComboBox = new System.Windows.Forms.ComboBox();
+            this.refreshButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.scripsDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -53,11 +55,37 @@ namespace k173669_Q3
             this.scripsDataGridView.Size = new System.Drawing.Size(776, 259);
             this.scripsDataGridView.TabIndex = 0;
             // 
+            // categoryComboBox
+            // 
+            this.categoryComboBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.categoryComboBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.categoryComboBox.DropDownWidth = 360;
+            this.categoryComboBox.FormattingEnabled = true;
+            this.categoryComboBox.Location = new System.Drawing.Point(12, 121);
+            this.categoryComboBox.Name = "categoryComboBox";
+            this.categoryComboBox.Size = new System.Drawing.Size(360, 28);
+            this.categoryComboBox.TabIndex = 1;
+            this.categoryComboBox.SelectionChangeCommitted += new System.EventHandler(this.categoryComboBox_SelectionChangeCommitted);
+            this.categoryComboBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.categoryComboBox_KeyDown);
+            // 
+            // refreshButton
+            // 
+            this.refreshButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.refreshButton.Location = new System.Drawing.Point(390, 121);
+            this.refreshButton.Name = "refreshButton";
+            this.refreshButton.Size = new System.Drawing.Size(118, 28);
+            this.refreshButton.TabIndex = 2;
+            this.refreshButton.Text = "REFRESH";
+            this.refreshButton.UseVisualStyleBackColor = true;
+            this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
+            // 
             // StocksPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.refreshButton);
+            this.Controls.Add(this.categoryComboBox);
             this.Controls.Add(this.scripsDataGridView);
             this.Name = "StocksPage";
             this.Text = "Stocks";
@@ -68,8 +96,9 @@ namespace k173669_Q3
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridView scripsDataGridView;
+        private System.Windows.Forms.ComboBox categoryComboBox;
+        private System.Windows.Forms.Button refreshButton;
     }
 }
 

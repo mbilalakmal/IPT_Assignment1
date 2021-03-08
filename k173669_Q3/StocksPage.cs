@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
@@ -15,9 +16,14 @@ namespace k173669_Q3
         {
             InitializeComponent();
 
+            CheckRootDirectory();
+        }
+
+        private void CheckRootDirectory()
+        {
             // Read appSettings from config file
             var appSettings = ConfigurationManager.AppSettings;
-            if(appSettings.AllKeys.Contains("RootFolder") && Directory.Exists(appSettings["RootFolder"]))
+            if (appSettings.AllKeys.Contains("RootFolder") && Directory.Exists(appSettings["RootFolder"]))
             {
                 string folderPath = appSettings["RootFolder"];
                 var directory = new DirectoryInfo(folderPath);
@@ -26,17 +32,20 @@ namespace k173669_Q3
                     .FirstOrDefault();
 
                 /// Check if a directory indeed exists and whether it contains the single XML file
-                if(latestSubDir != default(DirectoryInfo))
+                if (latestSubDir != default(DirectoryInfo))
                 {
                     var xmlFile = latestSubDir.GetFiles()
                         .Where(file => file.Extension == ".xml")
                         .OrderByDescending(file => file.LastWriteTime)
                         .FirstOrDefault();
 
-                    if(xmlFile != default(FileInfo))
+                    if (xmlFile != default(FileInfo))
                     {
+                        var categoryNames = latestSubDir.GetDirectories()
+                            .Select(dir => dir.Name).ToList();
+
                         /// Load the Scrips from XML file
-                        LoadScripsFromXml(xmlFile.FullName);
+                        LoadScripsFromXml(filePath: xmlFile.FullName, categories: categoryNames);
                     }
                     else
                     {
@@ -51,9 +60,8 @@ namespace k173669_Q3
             else
             {
                 /// TODO: Display error to the user about invalid appSettings
-                MessageBox.Show(text:"HELO", caption:"BYE");
+                MessageBox.Show(text: "HELO", caption: "BYE");
             }
-
         }
 
         /// <summary>
@@ -61,13 +69,35 @@ namespace k173669_Q3
         /// for scripsDataGridView.
         /// </summary>
         /// <param name="filePath"></param>
-        private void LoadScripsFromXml(string filePath)
+        /// <param name="categories"></param>
+        private void LoadScripsFromXml(string filePath, List<string> categories)
         {
             DataSet dataSet = new DataSet();
             dataSet.ReadXml(filePath);
 
             scripsDataGridView.DataSource = dataSet.Tables[0];
+
+            categoryComboBox.DataSource = categories;
+            categoryComboBox.SelectedIndex = -1;
         }
 
+        private void refreshButton_Click(object sender, EventArgs e)
+        {
+            CheckRootDirectory();
+        }
+
+        private void categoryComboBox_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            (scripsDataGridView.DataSource as DataTable)
+                .DefaultView.RowFilter = $"Category = '{(categoryComboBox.SelectedItem as string)}'";
+        }
+
+        private void categoryComboBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter && categoryComboBox.SelectedItem != null)
+            {
+                categoryComboBox_SelectionChangeCommitted(sender,e);
+            }
+        }
     }
 }
