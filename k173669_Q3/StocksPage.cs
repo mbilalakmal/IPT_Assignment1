@@ -27,9 +27,6 @@ namespace k173669_Q3
                     .OrderByDescending(dir => dir.LastWriteTime)
                     .FirstOrDefault();
 
-                Console.WriteLine(latestSubDir.Name);
-                Debug.WriteLine(latestSubDir.Name);
-
                 /// Check if a directory indeed exists and whether it contains the single XML file
                 if(latestSubDir != default(DirectoryInfo))
                 {
@@ -62,10 +59,10 @@ namespace k173669_Q3
 
         private void LoadScripsFromXml(string filePath)
         {
-            Debug.WriteLine("WOW:");
-
             DataSet dataSet = new DataSet();
             dataSet.ReadXml(filePath);
+
+            scripsDataGridView.DataSource = dataSet.Tables[0];
         }
 
     }

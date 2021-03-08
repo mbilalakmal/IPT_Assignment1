@@ -29,20 +29,40 @@ namespace k173669_Q3
         /// </summary>
         private void InitializeComponent()
         {
+            this.scripsDataGridView = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.scripsDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
-            // stocksForm
+            // scripsDataGridView
+            // 
+            this.scripsDataGridView.AllowUserToAddRows = false;
+            this.scripsDataGridView.AllowUserToDeleteRows = false;
+            this.scripsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.scripsDataGridView.Location = new System.Drawing.Point(12, 12);
+            this.scripsDataGridView.Name = "scripsDataGridView";
+            this.scripsDataGridView.ReadOnly = true;
+            this.scripsDataGridView.RowHeadersWidth = 51;
+            this.scripsDataGridView.RowTemplate.Height = 29;
+            this.scripsDataGridView.Size = new System.Drawing.Size(300, 188);
+            this.scripsDataGridView.TabIndex = 0;
+            // 
+            // StocksPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Name = "stocksForm";
+            this.Controls.Add(this.scripsDataGridView);
+            this.Name = "StocksPage";
             this.Text = "Stocks";
+            ((System.ComponentModel.ISupportInitialize)(this.scripsDataGridView)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView scripsDataGridView;
     }
 }
 
