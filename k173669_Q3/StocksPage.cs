@@ -11,8 +11,6 @@ namespace k173669_Q3
 {
     public partial class StocksPage : Form
     {
-        BindingList<Scrips> ScripsList;
-
         public StocksPage()
         {
             InitializeComponent();
@@ -52,11 +50,17 @@ namespace k173669_Q3
             }
             else
             {
-                /// TODO: Display error to the user
+                /// TODO: Display error to the user about invalid appSettings
+                MessageBox.Show(text:"HELO", caption:"BYE");
             }
 
         }
 
+        /// <summary>
+        /// Reads Data from provided XML file path and sets it as DataSource
+        /// for scripsDataGridView.
+        /// </summary>
+        /// <param name="filePath"></param>
         private void LoadScripsFromXml(string filePath)
         {
             DataSet dataSet = new DataSet();

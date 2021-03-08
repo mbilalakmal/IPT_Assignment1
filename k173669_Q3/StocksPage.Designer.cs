@@ -35,15 +35,22 @@ namespace k173669_Q3
             // 
             // scripsDataGridView
             // 
+            this.scripsDataGridView.AccessibleName = "ScripsDataGridView";
             this.scripsDataGridView.AllowUserToAddRows = false;
             this.scripsDataGridView.AllowUserToDeleteRows = false;
+            this.scripsDataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.scripsDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.scripsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.scripsDataGridView.Location = new System.Drawing.Point(12, 12);
+            this.scripsDataGridView.Location = new System.Drawing.Point(12, 179);
             this.scripsDataGridView.Name = "scripsDataGridView";
             this.scripsDataGridView.ReadOnly = true;
             this.scripsDataGridView.RowHeadersWidth = 51;
             this.scripsDataGridView.RowTemplate.Height = 29;
-            this.scripsDataGridView.Size = new System.Drawing.Size(300, 188);
+            this.scripsDataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.scripsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.scripsDataGridView.Size = new System.Drawing.Size(776, 259);
             this.scripsDataGridView.TabIndex = 0;
             // 
             // StocksPage
