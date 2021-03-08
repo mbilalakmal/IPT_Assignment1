@@ -111,10 +111,14 @@ namespace k173669_Q2
 
             Directory.CreateDirectory(newFolder);
 
-            foreach(var item in stocks)
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Scrips>));
+
+            List<Scrips> totalScrips = new List<Scrips>();
+
+            foreach (var item in stocks)
             {
                 // Remove / to prevent nested folders
-                string categoryName = item.Key.Replace("/", " ");
+                string categoryName = item.Key.Replace("/", "");
 
                 // Create a folder against each category
                 string subFolder = Path.Combine(newFolder, categoryName);
@@ -124,11 +128,18 @@ namespace k173669_Q2
                 string fileName = Path.Combine(subFolder, $"{categoryName}.xml");
 
                 using FileStream fileStream = new FileStream(fileName, FileMode.Create);
-                XmlSerializer serializer = new XmlSerializer(typeof(List<Scrips>));
 
                 var scrips = item.Value;
+                totalScrips.AddRange(scrips);
                 serializer.Serialize(fileStream, scrips);
             }
+
+            /// Also store the single XML containing every scrip
+            using FileStream fileStream1 = new FileStream(
+                Path.Combine(newFolder, "Summary.xml"), FileMode.Create
+                );
+
+            serializer.Serialize(fileStream1, totalScrips);
         }
     }
 }
