@@ -49,18 +49,29 @@ namespace k173669_Q3
                     }
                     else
                     {
-                        /// TODO: Display error to the user
+                        /// Display error to the user about no xml found
+                        MessageBox.Show(
+                            text: "Unable to locate any XML files inside the subdirectory.",
+                            caption: "XML File Not Found"
+                        );
                     }
                 }
                 else
                 {
-                    /// TODO: Display error to the user
+                    /// Display error to the user about no subdirectories found
+                    MessageBox.Show(
+                        text: "Unable to locate any directories inside the root folder.",
+                        caption: "SubDirectory Not Found"
+                    );
                 }
             }
             else
             {
-                /// TODO: Display error to the user about invalid appSettings
-                MessageBox.Show(text: "HELO", caption: "BYE");
+                /// Display error to the user about invalid appSettings
+                MessageBox.Show(
+                    text: "Unable to locate the specified root folder in appSettings.",
+                    caption: "RootFolder Not Found"
+                    );
             }
         }
 
