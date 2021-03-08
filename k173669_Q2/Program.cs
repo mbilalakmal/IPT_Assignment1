@@ -61,7 +61,7 @@ namespace k173669_Q2
             {
                 if (nNode.NodeType != HtmlNodeType.Element){ continue;}
 
-                string category = nNode.InnerText.Trim();
+                string category = SanitizeInputString(nNode.InnerText);
 
                 if (stocks.ContainsKey(category) != true)
                 {
@@ -77,7 +77,7 @@ namespace k173669_Q2
                 // Scrip names are 8 indices apart
                 for (int idx = 0; idx < collection.Count; idx += 8)
                 {
-                    string companyName = collection[idx].InnerText.Trim();
+                    string companyName = SanitizeInputString(collection[idx].InnerText);
                     // Current price is 5 indices ahead of scrip name
                     var currentValue = collection[idx + 5];
 
@@ -117,8 +117,7 @@ namespace k173669_Q2
 
             foreach (var item in stocks)
             {
-                // Remove / to prevent nested folders
-                string categoryName = item.Key.Replace("/", "");
+                string categoryName = item.Key;
 
                 // Create a folder against each category
                 string subFolder = Path.Combine(newFolder, categoryName);
@@ -140,6 +139,12 @@ namespace k173669_Q2
                 );
 
             serializer.Serialize(fileStream1, totalScrips);
+        }
+
+        static string SanitizeInputString(string input)
+        {
+            // Remove / to prevent nested folders and trailing period to prevent undeletable files
+            return input.Replace(@"/", "").Replace(@"\", "").Trim('.', ' ');
         }
     }
 }
