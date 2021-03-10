@@ -1,0 +1,100 @@
+﻿@page "/"
+@using System.IO
+@using System.Xml.Serialization
+@using k173669_Q4.Models
+
+<h1>Stocks</h1>
+
+<p>
+    <label>
+        <InputFile OnChange="@LoadFile" accept=".xml"/>
+    </label>
+</p>
+
+<p>
+    @if (cateogoriesList != default(List<string>))
+    {
+        <EditForm Model="cateogoriesList">
+            <label>Filter By Category</label>
+            <InputSelect @bind-Value="@selectedCategory" @bind-Value:event="@OnSelectionChanged">
+                <option value="" disabled hidden selected></option>
+                @foreach (var category in cateogoriesList)
+                    {
+                    <option value=@category>@category</option>
+                    }
+            </InputSelect>
+        </EditForm>
+    }
+</p>
+
+@if (isLoading)
+{
+    <p>Loading...</p>
+}
+
+@if (scripsList != default(List<Scrips>))
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Scrip</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var scrips in scripsList)
+            {
+                if (selectedCategory == default(string) || selectedCategory == scrips.Category)
+                {
+                    <tr>
+                        <td>@scrips.Category</td>
+                        <td>@scrips.Scrip</td>
+                        <td>@scrips.Price</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    private bool isLoading;
+
+    private List<Scrips> scripsList;
+
+    private List<string> cateogoriesList;
+
+    private string selectedCategory;
+
+    async Task LoadFile(InputFileChangeEventArgs e)
+    {
+        /// Set loading to true
+        isLoading = true;
+
+        try
+        {
+            var file = e.File;
+
+            /// Initialize stream for reading from XML file
+            using var stream = file.OpenReadStream();
+            var reader = new StreamReader(stream);
+
+            var xmlContent = await reader.ReadToEndAsync();
+
+            using var stringReader = new StringReader(xmlContent);
+            var serializer = new XmlSerializer(typeof(List<Scrips>));
+            scripsList = (List<Scrips>)serializer.Deserialize(stringReader);
+            cateogoriesList = scripsList.Select(scrip => scrip.Category).Distinct().ToList();
+
+        }
+        catch (Exception exc)
+        {
+
+            Console.WriteLine(exc.ToString());
+        }
+
+        isLoading = false;
+    }
+}
